@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cost of You</title>
+<meta name="description" content="How much did it cost the world to produce you? Add it up — then compare it to the cost of AI.">
+<meta property="og:title" content="The Cost of You">
+<meta property="og:description" content="How much did it cost the world to produce you? Add it up — then compare it to the cost of AI.">
+<meta property="og:image" content="https://www.human-cost.com/og.png">
+<meta property="og:url" content="https://www.human-cost.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Cost of You">
+<meta name="twitter:description" content="How much did it cost the world to produce you? Add it up — then compare it to the cost of AI.">
+<meta name="twitter:image" content="https://www.human-cost.com/og.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d0d0d; --card: #161616; --border: #2a2a2a;
+    --gold: #c9a84c; --gold-light: #e8c97a;
+    --text: #e8e4dc; --muted: #666;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+  header { text-align: center; padding: 64px 24px 48px; border-bottom: 1px solid var(--border); }
+  .eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(48px, 8vw, 96px); font-weight: 900; line-height: 0.9; letter-spacing: -0.02em; }
+  h1 em { font-style: italic; color: var(--gold-light); }
+  .subtitle { margin-top: 20px; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+  .ai-price { display: inline-block; margin-top: 16px; background: var(--gold); color: #000; font-size: 10px; letter-spacing: 0.2em; padding: 4px 12px; font-weight: 500; }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 24px 96px; }
+  .section { margin-bottom: 48px; opacity: 0; transform: translateY(20px); animation: fadeUp 0.5s ease forwards; }
+  .section:nth-child(1){animation-delay:.1s} .section:nth-child(2){animation-delay:.2s}
+  .section:nth-child(3){animation-delay:.3s} .section:nth-child(4){animation-delay:.4s}
+  .section:nth-child(5){animation-delay:.5s}
+  @keyframes fadeUp { to { opacity:1; transform:none; } }
+  .section-label { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  @media(max-width:500px){ .field-row { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  input, select { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 13px; padding: 12px 14px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }
+  input:focus, select:focus { border-color: var(--gold); }
+  input::placeholder { color: #3a3a3a; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+  select option { background: #1a1a1a; }
+  .extras-grid { display: flex; flex-direction: column; gap: 6px; }
+  .extra-item { background: var(--card); border: 1px solid var(--border); transition: border-color 0.15s, background 0.15s; user-select: none; }
+  .extra-item:hover { border-color: #3a3a3a; }
+  .extra-item.active { border-color: var(--gold); background: #1a180f; }
+  .extra-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; }
+  .extra-check { width: 15px; height: 15px; border: 1px solid #3a3a3a; flex-shrink: 0; position: relative; transition: border-color 0.15s; }
+  .extra-check::after { content: ''; position: absolute; inset: 3px; background: var(--gold); transform: scale(0); transition: transform 0.12s; }
+  .extra-item.active .extra-check { border-color: var(--gold); }
+  .extra-item.active .extra-check::after { transform: scale(1); }
+  .extra-label { font-size: 12px; color: var(--text); flex: 1; }
+  .extra-rate  { font-size: 10px; color: var(--muted); margin-right: 4px; }
+  .extra-cost  { font-size: 11px; color: var(--gold); min-width: 44px; text-align: right; }
+  .extra-controls { display: none; flex-direction: column; gap: 10px; padding: 2px 14px 14px 39px; }
+  .extra-item.active .extra-controls { display: flex; }
+  .ctrl-row { display: flex; align-items: center; gap: 10px; }
+  .ctrl-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); width: 72px; flex-shrink: 0; }
+  .ctrl-slider-wrap { flex: 1; }
+  .ctrl-slider-wrap input[type=range] { -webkit-appearance: none; appearance: none; background: #2a2a2a; height: 2px; padding: 0; border: none; cursor: pointer; width: 100%; display: block; }
+  .ctrl-slider-wrap input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--gold); border-radius: 0; cursor: pointer; }
+  .ctrl-val { font-size: 11px; color: var(--gold); width: 64px; text-align: right; flex-shrink: 0; }
+  .extra-infl-note { font-size: 9px; color: #555; letter-spacing: 0.04em; margin-top: -2px; }
+  .calc-btn { width: 100%; background: var(--gold); color: #000; border: none; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; padding: 18px; cursor: pointer; font-weight: 500; margin-top: 16px; transition: background 0.2s, transform 0.1s; }
+  .calc-btn:hover { background: var(--gold-light); }
+  .calc-btn:active { transform: scale(0.99); }
+  #result { display: none; margin-top: 48px; border: 1px solid var(--gold); background: #0f0e0b; padding: 40px; position: relative; overflow: hidden; }
+  #result::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .result-eyebrow { font-size: 9px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 24px; }
+  .big-number { font-family: 'Playfair Display', serif; font-size: clamp(48px, 10vw, 88px); font-weight: 900; line-height: 1; color: var(--gold-light); letter-spacing: -0.02em; margin-bottom: 8px; }
+  .vs-line { font-size: 11px; color: var(--muted); margin-bottom: 32px; letter-spacing: 0.05em; }
+  .vs-line strong { color: var(--text); }
+  .breakdown { border-top: 1px solid var(--border); padding-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .breakdown-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; }
+  .breakdown-row .item { color: var(--muted); }
+  .breakdown-row .amount { color: var(--text); }
+  .breakdown-row.total { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+  .breakdown-row.total .item { color: var(--text); font-weight: 500; }
+  .breakdown-row.total .amount { color: var(--gold-light); font-weight: 500; }
+  .ai-comparison { margin-top: 24px; background: var(--card); border: 1px solid var(--border); padding: 20px; font-size: 12px; line-height: 1.8; color: var(--muted); }
+  .ai-comparison strong { color: var(--text); }
+  .ai-comparison .highlight { color: var(--gold); }
+  .multiplier { display: inline-block; font-family: 'Playfair Display', serif; font-size: 28px; font-style: italic; color: var(--gold-light); margin-right: 6px; }
+  .share-row { display: flex; gap: 8px; margin-top: 20px; }
+  .share-btn { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.2em; padding: 10px; cursor: pointer; text-transform: uppercase; transition: border-color 0.2s, color 0.2s; }
+  .share-btn:hover { border-color: var(--gold); color: var(--gold); }
+  footer { text-align: center; padding: 32px; font-size: 10px; color: #333; letter-spacing: 0.1em; border-top: 1px solid var(--border); }
+  .notice-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .notice-box { background: var(--card); border: 1px solid var(--border); max-width: 420px; width: 100%; padding: 32px; text-align: center; }
+  .notice-box .notice-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--gold-light); margin-bottom: 16px; }
+  .notice-box p { font-size: 11px; line-height: 1.8; color: var(--muted); margin-bottom: 12px; letter-spacing: 0.04em; }
+  .notice-box a { color: var(--gold); text-decoration: none; }
+  .notice-box a:hover { text-decoration: underline; }
+  .notice-btn { background: var(--gold); color: #000; border: none; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; padding: 14px 32px; cursor: pointer; font-weight: 500; margin-top: 8px; transition: background 0.2s; }
+  .notice-btn:hover { background: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<div class="notice-overlay" id="noticeOverlay">
+  <div class="notice-box">
+    <div class="notice-title">Before you begin</div>
+    <p>This tool runs entirely in your browser. No data is collected, stored, or sent anywhere. Ever.</p>
+    <p>It's also <a href="https://github.com/Avanderheyde/human-cost" target="_blank" rel="noopener">open source</a> — feel free to inspect, fork, or improve it.</p>
+    <button class="notice-btn" onclick="document.getElementById('noticeOverlay').remove()">Got it</button>
+  </div>
+</div>
+
+<header>
+  <p class="eyebrow">A Financial Reckoning</p>
+  <h1>The Cost<br>of <em>You</em></h1>
+  <p class="subtitle">How much has it cost the world to produce you?<br>Add it up — then compare it to the cost of AI.</p>
+  <span class="ai-price">GPT-4o: ~$0.0025 per query · Claude: ~$0.003 per query</span>
+</header>
+
+<main>
+
+  <div class="section">
+    <div class="section-label">Origins</div>
+    <div class="field-row">
+      <div>
+        <label>Birth year</label>
+        <input type="number" id="birthYear" placeholder="e.g. 1990" min="1950" max="2015" oninput="onBirthYearChange()">
+      </div>
+      <div>
+        <label>Zip code you grew up in</label>
+        <input type="text" id="zipcode" placeholder="e.g. 10001" maxlength="5">
+      </div>
+    </div>
+    <div class="field-row">
+      <div>
+        <label>Years spent there (childhood)</label>
+        <input type="number" id="years" placeholder="18" min="1" max="25" value="18">
+      </div>
+      <div>
+        <div id="inflationBadge" style="display:none; padding-top:22px;">
+          <div style="background:#1c1a14; border:1px solid var(--gold); padding:8px 12px; font-size:10px; color:var(--gold); letter-spacing:0.1em;">
+            <span id="inflationText"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">K–12 Education</div>
+    <div class="field-row">
+      <div>
+        <label>School type</label>
+        <select id="k12type">
+          <option value="public">Public school</option>
+          <option value="private_day">Private day school</option>
+          <option value="private_boarding">Private boarding school</option>
+          <option value="parochial">Parochial / religious school</option>
+          <option value="charter">Charter school</option>
+          <option value="homeschool">Homeschooled</option>
+        </select>
+      </div>
+      <div>
+        <label>Location cost tier</label>
+        <select id="costTier">
+          <option value="1">Low cost (rural / midwest)</option>
+          <option value="1.5" selected>Medium cost (suburban)</option>
+          <option value="2.2">High cost (major metro)</option>
+          <option value="3">Very high (NYC / SF / LA)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Higher Education</div>
+    <div class="field-row">
+      <div>
+        <label>College type</label>
+        <select id="collegetype">
+          <option value="none">No college</option>
+          <option value="community">Community college (2yr)</option>
+          <option value="state_in">State university (in-state)</option>
+          <option value="state_out">State university (out-of-state)</option>
+          <option value="private">Private university</option>
+          <option value="elite">Elite / Ivy-level university</option>
+        </select>
+      </div>
+      <div>
+        <label>Years attended</label>
+        <input type="number" id="collegeYears" placeholder="4" min="0" max="8" value="4">
+      </div>
+    </div>
+    <div class="field-row">
+      <div>
+        <label>Graduate school</label>
+        <select id="gradschool">
+          <option value="none">None</option>
+          <option value="masters">Master's degree (2yr)</option>
+          <option value="mba">MBA</option>
+          <option value="law">Law school (JD)</option>
+          <option value="med">Medical school (MD)</option>
+          <option value="phd">PhD (5–7yr)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Enrichment & Extracurriculars</div>
+    <div class="extras-grid" id="extrasGrid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Life & Healthcare (est. years 0–22)</div>
+    <div class="field-row">
+      <div>
+        <label>Healthcare coverage</label>
+        <select id="healthcare">
+          <option value="uninsured">Mostly uninsured</option>
+          <option value="medicaid">Medicaid / public</option>
+          <option value="employer" selected>Employer / private insurance</option>
+          <option value="premium">Premium private coverage</option>
+        </select>
+      </div>
+      <div>
+        <label>Food & childcare estimate</label>
+        <select id="foodcare">
+          <option value="low">Budget / assistance</option>
+          <option value="mid" selected>Middle class</option>
+          <option value="high">Comfortable / above avg</option>
+          <option value="luxury">Luxury / nanny etc.</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">→ Calculate the Cost of Me</button>
+
+  <div id="result">
+    <p class="result-eyebrow">Total Estimated Investment to Produce You</p>
+    <div class="big-number" id="bigNumber">$0</div>
+    <p class="vs-line" id="vsLine"></p>
+    <div class="breakdown" id="breakdown"></div>
+    <div class="ai-comparison" id="aiComparison"></div>
+    <div class="share-row">
+      <button class="share-btn" onclick="copyResult()">Copy result</button>
+      <button class="share-btn" onclick="resetForm()">Start over</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Estimates are illustrative, not exact. Sources: NCES, College Board, BLS CPI data, Aspen Institute Project Play.
+</footer>
+
+<script>
+const CPI = {
+  1950:24.1,1951:26.0,1952:26.5,1953:26.7,1954:26.9,1955:26.8,1956:27.2,
+  1957:28.1,1958:28.9,1959:29.1,1960:29.6,1961:29.9,1962:30.2,1963:30.6,
+  1964:31.0,1965:31.5,1966:32.4,1967:33.4,1968:34.8,1969:36.7,1970:38.8,
+  1971:40.5,1972:41.8,1973:44.4,1974:49.3,1975:53.8,1976:56.9,1977:60.6,
+  1978:65.2,1979:72.6,1980:82.4,1981:90.9,1982:96.5,1983:99.6,1984:103.9,
+  1985:107.6,1986:109.6,1987:113.6,1988:118.3,1989:124.0,1990:130.7,
+  1991:136.2,1992:140.3,1993:144.5,1994:148.2,1995:152.4,1996:156.9,
+  1997:160.5,1998:163.0,1999:166.6,2000:172.2,2001:177.1,2002:179.9,
+  2003:184.0,2004:188.9,2005:195.3,2006:201.6,2007:207.3,2008:215.3,
+  2009:214.5,2010:218.1,2011:224.9,2012:229.6,2013:233.0,2014:236.7,
+  2015:237.0,2016:240.0,2017:245.1,2018:251.1,2019:255.7,2020:258.8,
+  2021:270.9,2022:292.7,2023:304.7,2024:314.5,2025:320.0
+};
+const CURRENT_YEAR = 2025;
+function getCPI(y) { return CPI[Math.max(1950, Math.min(CURRENT_YEAR, Math.round(y)))] || CPI[CURRENT_YEAR]; }
+function deflate(year) { return getCPI(year) / getCPI(CURRENT_YEAR); }
+function avgDeflate(s, e) {
+  s = Math.round(s); e = Math.round(e);
+  var sum = 0, n = 0;
+  for (var y = s; y <= e; y++) { sum += deflate(y); n++; }
+  return n > 0 ? sum / n : 1;
+}
+function getBirthYear() {
+  var v = parseInt(document.getElementById('birthYear').value);
+  return (v >= 1950 && v <= 2015) ? v : null;
+}
+
+var extras = [
+  { id:'music_lessons',  label:'Music lessons',          costPerYear:1860,  defaultStartAge:7,  defaultDur:5,  maxDur:15, note:'~$155/mo' },
+  { id:'sports_team',    label:'Rec / school sports',    costPerYear:1500,  defaultStartAge:7,  defaultDur:6,  maxDur:14, note:'~$1,500/yr avg' },
+  { id:'travel_sports',  label:'Travel sports team',     costPerYear:5000,  defaultStartAge:10, defaultDur:4,  maxDur:10, note:'$3K\u2013$10K/yr' },
+  { id:'tennis',         label:'Tennis / golf lessons',  costPerYear:2400,  defaultStartAge:8,  defaultDur:4,  maxDur:12, note:'~$200/mo' },
+  { id:'dance',          label:'Dance / gymnastics',     costPerYear:2000,  defaultStartAge:5,  defaultDur:5,  maxDur:14, note:'~$2K/yr' },
+  { id:'tutoring',       label:'Private tutoring',       costPerYear:3000,  defaultStartAge:12, defaultDur:3,  maxDur:10, note:'~$60/hr, 1\u00d7/wk' },
+  { id:'summer_camp',    label:'Summer camp',            costPerYear:3500,  defaultStartAge:8,  defaultDur:4,  maxDur:12, note:'$2K\u2013$5K/summer' },
+  { id:'art',            label:'Art classes',            costPerYear:1200,  defaultStartAge:8,  defaultDur:3,  maxDur:10, note:'~$100/mo' },
+  { id:'coding',         label:'Coding / STEM programs', costPerYear:2000,  defaultStartAge:12, defaultDur:2,  maxDur:8,  note:'~$2K/yr' },
+  { id:'debate',         label:'Debate / Model UN',      costPerYear:1500,  defaultStartAge:14, defaultDur:2,  maxDur:6,  note:'fees + travel' },
+  { id:'study_abroad',   label:'Study abroad',           costPerYear:9000,  defaultStartAge:20, defaultDur:1,  maxDur:6,  note:'$8K\u2013$13K/semester', unit:'semester' },
+  { id:'sat_prep',       label:'SAT / ACT prep',         costPerYear:1500,  defaultStartAge:16, defaultDur:1,  maxDur:3,  note:'$500\u2013$3K' },
+];
+
+var selectedExtras = new Set();
+var extraState = {};
+
+function extraStartYear(id) {
+  var by = getBirthYear();
+  var e = extras.find(function(x){return x.id===id});
+  var age = extraState[id] ? extraState[id].startAge : (e ? e.defaultStartAge : 10);
+  return by ? by + age : CURRENT_YEAR - 10;
+}
+function extraEndYear(id) {
+  return extraStartYear(id) + ((extraState[id] ? extraState[id].dur : 1)) - 1;
+}
+function extraInflFactor(id) {
+  var by = getBirthYear();
+  if (!by) return 1;
+  return avgDeflate(extraStartYear(id), extraEndYear(id));
+}
+function extraTotal(e) {
+  return e.costPerYear * (extraState[e.id] ? extraState[e.id].dur : e.defaultDur) * extraInflFactor(e.id);
+}
+function extraTotalNoInfl(e) {
+  return e.costPerYear * (extraState[e.id] ? extraState[e.id].dur : e.defaultDur);
+}
+
+function updateExtraDisplay(e) {
+  var by = getBirthYear();
+  var costEl = document.getElementById('cost-' + e.id);
+  var inflEl = document.getElementById('infl-' + e.id);
+  if (costEl) costEl.textContent = '+' + fmt(by ? extraTotal(e) : extraTotalNoInfl(e));
+  if (inflEl) {
+    if (by) {
+      var sy = extraStartYear(e.id), ey = extraEndYear(e.id);
+      var pct = Math.round((1 - extraInflFactor(e.id)) * 100);
+      inflEl.textContent = pct > 1 ? sy + '\u2013' + ey + '  \u00b7  ~' + pct + '% less than today\'s prices' : sy + '\u2013' + ey;
+      inflEl.style.display = 'block';
+    } else {
+      inflEl.style.display = 'none';
+    }
+  }
+}
+
+function buildExtrasGrid() {
+  var grid = document.getElementById('extrasGrid');
+  extras.forEach(function(e) {
+    extraState[e.id] = { startAge: e.defaultStartAge, dur: e.defaultDur };
+    var el = document.createElement('div');
+    el.className = 'extra-item';
+
+    var header = document.createElement('div');
+    header.className = 'extra-header';
+
+    var check = document.createElement('div');
+    check.className = 'extra-check';
+    header.appendChild(check);
+
+    var lbl = document.createElement('span');
+    lbl.className = 'extra-label';
+    lbl.textContent = e.label;
+    header.appendChild(lbl);
+
+    var rate = document.createElement('span');
+    rate.className = 'extra-rate';
+    rate.textContent = e.note;
+    header.appendChild(rate);
+
+    var cost = document.createElement('span');
+    cost.className = 'extra-cost';
+    cost.id = 'cost-' + e.id;
+    cost.textContent = '+' + fmt(extraTotalNoInfl(e));
+    header.appendChild(cost);
+
+    el.appendChild(header);
+
+    var controls = document.createElement('div');
+    controls.className = 'extra-controls';
+
+    // Start age slider
+    var row1 = document.createElement('div');
+    row1.className = 'ctrl-row';
+    var cl1 = document.createElement('span');
+    cl1.className = 'ctrl-label';
+    cl1.textContent = 'Started';
+    row1.appendChild(cl1);
+    var sw1 = document.createElement('div');
+    sw1.className = 'ctrl-slider-wrap';
+    var sl1 = document.createElement('input');
+    sl1.type = 'range'; sl1.min = '3'; sl1.max = '22'; sl1.value = String(e.defaultStartAge);
+    sl1.id = 'start-' + e.id;
+    sw1.appendChild(sl1);
+    row1.appendChild(sw1);
+    var sv1 = document.createElement('span');
+    sv1.className = 'ctrl-val';
+    sv1.id = 'startval-' + e.id;
+    sv1.textContent = 'age ' + e.defaultStartAge;
+    row1.appendChild(sv1);
+    controls.appendChild(row1);
+
+    // Duration slider
+    var row2 = document.createElement('div');
+    row2.className = 'ctrl-row';
+    var cl2 = document.createElement('span');
+    cl2.className = 'ctrl-label';
+    cl2.textContent = 'Duration';
+    row2.appendChild(cl2);
+    var sw2 = document.createElement('div');
+    sw2.className = 'ctrl-slider-wrap';
+    var sl2 = document.createElement('input');
+    sl2.type = 'range'; sl2.min = '1'; sl2.max = String(e.maxDur); sl2.value = String(e.defaultDur);
+    sl2.id = 'dur-' + e.id;
+    sw2.appendChild(sl2);
+    row2.appendChild(sw2);
+    var dv2 = document.createElement('span');
+    dv2.className = 'ctrl-val';
+    dv2.id = 'durval-' + e.id;
+    var durUnit = e.unit === 'semester' ? (e.defaultDur > 1 ? ' semesters' : ' semester') : (' yr' + (e.defaultDur > 1 ? 's' : ''));
+    dv2.textContent = e.defaultDur + durUnit;
+    row2.appendChild(dv2);
+    controls.appendChild(row2);
+
+    // Inflation note
+    var inflNote = document.createElement('div');
+    inflNote.className = 'extra-infl-note';
+    inflNote.id = 'infl-' + e.id;
+    inflNote.style.display = 'none';
+    controls.appendChild(inflNote);
+
+    el.appendChild(controls);
+
+    header.addEventListener('click', function() {
+      if (selectedExtras.has(e.id)) { selectedExtras.delete(e.id); el.classList.remove('active'); }
+      else { selectedExtras.add(e.id); el.classList.add('active'); updateExtraDisplay(e); }
+    });
+
+    var sp = function(ev) { ev.stopPropagation(); };
+
+    sl1.addEventListener('click', sp);
+    sl1.addEventListener('input', function(ev) {
+      ev.stopPropagation();
+      extraState[e.id].startAge = parseInt(ev.target.value);
+      document.getElementById('startval-' + e.id).textContent = 'age ' + extraState[e.id].startAge;
+      updateExtraDisplay(e);
+    });
+
+    sl2.addEventListener('click', sp);
+    sl2.addEventListener('input', function(ev) {
+      ev.stopPropagation();
+      var d = parseInt(ev.target.value);
+      extraState[e.id].dur = d;
+      var unit = e.unit === 'semester' ? (d > 1 ? ' semesters' : ' semester') : (' yr' + (d > 1 ? 's' : ''));
+      document.getElementById('durval-' + e.id).textContent = d + unit;
+      updateExtraDisplay(e);
+    });
+
+    grid.appendChild(el);
+  });
+}
+
+function onBirthYearChange() {
+  var by = getBirthYear();
+  var badge = document.getElementById('inflationBadge');
+  var txt   = document.getElementById('inflationText');
+  if (!by) { badge.style.display = 'none'; }
+  else {
+    var pct = Math.round((1 - deflate(by + 11)) * 100);
+    txt.textContent = pct > 1 ? 'Inflation-adjusted for ' + by + ' birth year (~' + pct + '% lower on avg)' : 'Costs shown in today\'s dollars';
+    badge.style.display = 'block';
+  }
+  extras.forEach(function(e) { updateExtraDisplay(e); });
+}
+
+function fmt(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+  return '$' + n.toLocaleString();
+}
+function fmtFull(n) { return '$' + Math.round(n).toLocaleString(); }
+
+function calculate() {
+  var tier      = parseFloat(document.getElementById('costTier').value);
+  var years     = parseInt(document.getElementById('years').value) || 18;
+  var birthYear = getBirthYear();
+  var hasInfl   = birthYear !== null;
+
+  var colIF     = hasInfl ? avgDeflate(birthYear, birthYear + years) : 1;
+  var k12IF     = hasInfl ? avgDeflate(birthYear + 5, birthYear + 18) : 1;
+  var collegeMid = hasInfl ? birthYear + 20 : CURRENT_YEAR;
+  var gradMid    = hasInfl ? birthYear + 26 : CURRENT_YEAR;
+  var collegeIF  = hasInfl ? deflate(collegeMid) : 1;
+  var gradIF     = hasInfl ? deflate(gradMid) : 1;
+  var healthIF   = hasInfl ? avgDeflate(birthYear, birthYear + 22) : 1;
+
+  var baseCOL = { 1:8000, 1.5:13000, 2.2:22000, 3:35000 };
+  var livingCost = (baseCOL[tier] || 13000) * years * colIF;
+
+  var k12Costs = { public:0, charter:0, parochial:60000, private_day:200000, private_boarding:340000, homeschool:25000 };
+  var k12 = (k12Costs[document.getElementById('k12type').value] || 0) * tier * 0.6 * k12IF;
+
+  var collegeType = document.getElementById('collegetype').value;
+  var collegeYears = parseInt(document.getElementById('collegeYears').value) || 4;
+  var collegeCPY = { none:0, community:8000, state_in:27000, state_out:44000, private:62000, elite:82000 };
+  var collegeCost = (collegeCPY[collegeType] || 0) * collegeYears * collegeIF;
+
+  var gradCosts = { none:0, masters:80000, mba:160000, law:210000, med:280000, phd:40000 };
+  var gradCost = (gradCosts[document.getElementById('gradschool').value] || 0) * gradIF;
+
+  var healthAnnual = { uninsured:1200, medicaid:3000, employer:6500, premium:14000 };
+  var healthcareCost = (healthAnnual[document.getElementById('healthcare').value] || 6500) * 22 * healthIF;
+
+  var foodPY = { low:6000, mid:14000, high:22000, luxury:40000 };
+  var foodCost = (foodPY[document.getElementById('foodcare').value] || 14000) * 22 * colIF;
+
+  var extrasCost = 0;
+  extras.forEach(function(e) { if (selectedExtras.has(e.id)) extrasCost += extraTotal(e); });
+
+  var total = livingCost + k12 + collegeCost + gradCost + healthcareCost + foodCost + extrasCost;
+
+  var todayTotal = (baseCOL[tier]||13000)*years + (k12Costs[document.getElementById('k12type').value]||0)*tier*0.6
+    + (collegeCPY[collegeType]||0)*collegeYears + (gradCosts[document.getElementById('gradschool').value]||0)
+    + (healthAnnual[document.getElementById('healthcare').value]||6500)*22
+    + (foodPY[document.getElementById('foodcare').value]||14000)*22
+    + extras.reduce(function(s,e) { return s + (selectedExtras.has(e.id) ? extraTotalNoInfl(e) : 0); }, 0);
+
+  var resultEl = document.getElementById('result');
+  resultEl.style.display = 'block';
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  animateNumber(document.getElementById('bigNumber'), total);
+
+  var aiCPQ = 0.003;
+  var queries = Math.round(total / aiCPQ);
+  var mult    = Math.round(total / aiCPQ / 1000000);
+
+  var vsEl = document.getElementById('vsLine');
+  vsEl.textContent = '';
+  var t1 = document.createTextNode('That\u2019s ');
+  var s1 = document.createElement('strong');
+  s1.textContent = queries.toLocaleString();
+  var t2 = document.createTextNode(' Claude queries at current API pricing.');
+  vsEl.appendChild(t1); vsEl.appendChild(s1); vsEl.appendChild(t2);
+  if (hasInfl) {
+    var sp1 = document.createElement('span');
+    sp1.style.cssText = 'color:var(--muted);font-size:10px;';
+    sp1.textContent = ' (in ' + birthYear + ' dollars \u00b7 ' + fmtFull(todayTotal) + ' in today\u2019s money)';
+    vsEl.appendChild(sp1);
+  }
+
+  var inflLabel = hasInfl ? ' (inflation-adj.)' : '';
+  var rows = [
+    ['Cost of living (childhood)' + inflLabel, livingCost],
+    ['K\u201312 education' + inflLabel, k12],
+    ['College / university' + inflLabel, collegeCost],
+    ['Graduate school' + inflLabel, gradCost],
+    ['Healthcare (0\u201322 yrs)' + inflLabel, healthcareCost],
+    ['Food & childcare' + inflLabel, foodCost],
+    ['Extracurriculars' + inflLabel, extrasCost],
+  ].filter(function(r) { return r[1] > 0; });
+
+  var bdEl = document.getElementById('breakdown');
+  bdEl.textContent = '';
+  rows.forEach(function(r) {
+    var row = document.createElement('div');
+    row.className = 'breakdown-row';
+    var item = document.createElement('span');
+    item.className = 'item';
+    item.textContent = r[0];
+    var amt = document.createElement('span');
+    amt.className = 'amount';
+    amt.textContent = fmtFull(r[1]);
+    row.appendChild(item); row.appendChild(amt);
+    bdEl.appendChild(row);
+  });
+  var totalRow = document.createElement('div');
+  totalRow.className = 'breakdown-row total';
+  var totalItem = document.createElement('span');
+  totalItem.className = 'item';
+  totalItem.textContent = 'Total' + (hasInfl ? ' (in ' + birthYear + ' dollars)' : '');
+  var totalAmt = document.createElement('span');
+  totalAmt.className = 'amount';
+  totalAmt.textContent = fmtFull(total);
+  totalRow.appendChild(totalItem); totalRow.appendChild(totalAmt);
+  bdEl.appendChild(totalRow);
+
+  var multStr = mult > 1 ? mult + ',000\u00d7' : '~' + Math.round(total/aiCPQ/1000) + 'K\u00d7';
+  var eraNote = hasInfl ? ' Growing up starting in ' + birthYear + ', these are the dollars your family actually spent \u2014 equivalent to ' + fmtFull(todayTotal) + ' in today\u2019s money.' : '';
+
+  var aiEl = document.getElementById('aiComparison');
+  aiEl.textContent = '';
+
+  var mSpan = document.createElement('span');
+  mSpan.className = 'multiplier';
+  mSpan.textContent = multStr;
+  aiEl.appendChild(mSpan);
+  aiEl.appendChild(document.createTextNode(' more expensive than AI \u2014 for one life.'));
+  aiEl.appendChild(document.createElement('br'));
+  aiEl.appendChild(document.createElement('br'));
+
+  var s2 = document.createElement('strong');
+  s2.textContent = 'Sam Altman\u2019s point';
+  aiEl.appendChild(s2);
+  aiEl.appendChild(document.createTextNode(', made concrete: producing you cost roughly ' + fmtFull(total) + (hasInfl ? ' in ' + birthYear + '-era dollars' : ' in today\u2019s dollars') + '.' + eraNote + ' The same budget could run '));
+  var s3 = document.createElement('strong');
+  s3.textContent = queries.toLocaleString() + ' AI queries';
+  aiEl.appendChild(s3);
+  aiEl.appendChild(document.createTextNode('.'));
+  aiEl.appendChild(document.createElement('br'));
+  aiEl.appendChild(document.createElement('br'));
+  aiEl.appendChild(document.createTextNode('Of course, you can do things no AI can. But the economics are striking.'));
+
+  window._lastTotal = total;
+  window._lastBirthYear = birthYear;
+}
+
+function animateNumber(el, target) {
+  var dur = 1200, start = performance.now();
+  function step(now) {
+    var p = Math.min((now - start) / dur, 1);
+    var ease = 1 - Math.pow(1 - p, 4);
+    el.textContent = '$' + Math.round(ease * target).toLocaleString();
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function copyResult() {
+  if (!window._lastTotal) return;
+  var by = window._lastBirthYear ? ' (born ' + window._lastBirthYear + ', inflation-adjusted)' : '';
+  navigator.clipboard.writeText('The cost to produce me: $' + Math.round(window._lastTotal).toLocaleString() + by + ' \u2014 vs ~$0.003 per AI query.').then(function() {
+    var btn = document.querySelector('.share-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy result'; }, 2000);
+  });
+}
+
+function resetForm() {
+  document.getElementById('result').style.display = 'none';
+  selectedExtras.clear();
+  document.querySelectorAll('.extra-item').forEach(function(el) { el.classList.remove('active'); });
+  extras.forEach(function(e) {
+    extraState[e.id] = { startAge: e.defaultStartAge, dur: e.defaultDur };
+    var ss = document.getElementById('start-' + e.id);
+    var ds = document.getElementById('dur-' + e.id);
+    if (ss) ss.value = e.defaultStartAge;
+    if (ds) ds.value = e.defaultDur;
+    var sv = document.getElementById('startval-' + e.id);
+    var dv = document.getElementById('durval-' + e.id);
+    if (sv) sv.textContent = 'age ' + e.defaultStartAge;
+    if (dv) {
+      var durUnit = e.unit === 'semester' ? (e.defaultDur > 1 ? ' semesters' : ' semester') : (' yr' + (e.defaultDur > 1 ? 's' : ''));
+      dv.textContent = e.defaultDur + durUnit;
+    }
+    updateExtraDisplay(e);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildExtrasGrid();
+</script>
+</body>
+</html>
