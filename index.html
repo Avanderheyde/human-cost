@@ -600,7 +600,11 @@ function calculate() {
   aiEl.appendChild(document.createElement('br'));
   aiEl.appendChild(document.createElement('br'));
 
-  var s2 = document.createElement('strong');
+  var s2 = document.createElement('a');
+  s2.href = 'https://www.youtube.com/watch?v=erHIhpo-NiU&t=81s';
+  s2.target = '_blank';
+  s2.rel = 'noopener';
+  s2.style.cssText = 'color:var(--gold);text-decoration:none;font-weight:bold;';
   s2.textContent = 'Sam Altman\u2019s point';
   aiEl.appendChild(s2);
   aiEl.appendChild(document.createTextNode(', made concrete: producing you cost roughly ' + fmtFull(total) + (hasInfl ? ' in ' + birthYear + '-era dollars' : ' in today\u2019s dollars') + '.' + eraNote + ' The same budget could run '));
